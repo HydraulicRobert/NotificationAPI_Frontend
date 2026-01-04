@@ -39,7 +39,7 @@ http://192.168.0.123:80
 -access the frontend using the frontend pc's ip and port, ip:5173.
 example
 ```shell
-http://192.168.0.123:80
+http://192.168.0.123:5173
 ```
 
 the header has the title and a randomised version number 
