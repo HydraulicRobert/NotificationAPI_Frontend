@@ -6,14 +6,14 @@
 - [Planned](#Planned)
 - [License](#License)
 ## About
-this react frontend provides a secure dashboard for the [backend](https://github.com/HydraulicRobert/dbProxy), currently allowing a monitoring tool for the notifications.
+this react frontend provides a secure dashboard for the [backend](https://github.com/HydraulicRobert/NotificationAPI), currently allowing a monitoring tool for the notifications.
 
 ## Requirements
 -**node.js:** v20.19 or newer
--**backend:** instance of [backend](https://github.com/HydraulicRobert/dbProxy)
+-**backend:** instance of [backend](https://github.com/HydraulicRobert/NotificationAPI)
 
 ## Setup
-follow the instruction on [backend](https://github.com/HydraulicRobert/dbProxy#how-to-use)
+follow the instruction on [backend](https://github.com/HydraulicRobert/NotificationAPI#how-to-use)
 
 navigate to the root directory
 install the required packages using
