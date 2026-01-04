@@ -53,7 +53,7 @@ footer has your username, the current frontend's status and time of the last rec
 ## Documentation
 explanation of the different components
 ### images
-has all the images used inthe documentation
+has all the images used in the documentation
 
 ### src
 has all the assets, components and variables
@@ -97,7 +97,9 @@ saves the configuration for the frontend, like the host ip to attach to and the 
 
 ## Planned
 -an administrative tab for administrators to manage the backend comfortably with a gui dashboard.
+
 -jwt to be saved as cookie
+
 -more encryption
 
 ## license
