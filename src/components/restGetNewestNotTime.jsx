@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-export function GetNewestNotTime({jwtToken, newestNotTimeUrl, newestNotTime, setNewestNotTime}){
+export function GetNewestNotTime({newestNotTimeUrl, newestNotTime, setNewestNotTime}){
 //    console.log("url, ",newestNotTimeUrl,";time ",newestNotTime,";token ",jwtToken); 
     var intTime;
         useEffect(() => {
@@ -8,10 +8,10 @@ export function GetNewestNotTime({jwtToken, newestNotTimeUrl, newestNotTime, set
     
                 const loginResponse = await fetch(newestNotTimeUrl, {
                 method: "GET",
+                'credentials': "include",
                 headers: {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'Authorization': 'Bearer '+jwtToken
+                    'Accept': 'application/json'
                 }
                 });
                 intTime = await loginResponse.text();

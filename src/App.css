@@ -28,6 +28,8 @@ html,body,#root{
   width: 50%;
   margin: 0 auto;
   height: 100%;
+  min-height: 100%;
+  max-height: 100%;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -37,6 +39,7 @@ html,body,#root{
   background-color: black;
   font-size: 20px;
   height: 10%;
+  min-height: fit-content;
   flex-shrink: 0;
   padding-left: 5px;
   }
@@ -44,8 +47,12 @@ html,body,#root{
   border-bottom: 1px solid lime;
 }
 #FooterMain{
+  bottom: 0;
+  position: fixed;
+  width: inherit;
   border-top: 1px solid lime;
   height: 10%;
+  min-height: fit-content;
   flex-shrink: 0;
   background-color: black;
 }

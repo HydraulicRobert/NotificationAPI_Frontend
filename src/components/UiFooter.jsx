@@ -13,7 +13,7 @@ export function UiFooter({operatorName, lastSettingsUpdate, status, newestNotifi
                             </tr>
                             <tr>
                                 <td>
-                                    max
+                                    {(operatorName)}
                                 </td>
                             </tr>
                         </tbody>

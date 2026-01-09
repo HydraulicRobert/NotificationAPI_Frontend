@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-export function GetNotifications({jwtToken, notURL, tableClick, notsRefresh}){
+export function GetNotifications({notURL, tableClick, notsRefresh}){
 //alert(notURL);
 var [items, setItems] = useState([]);
 var itemIdLength;
@@ -9,13 +9,13 @@ var itemAffectedLength = 0;
             try{
 
                     const loginResponse = await fetch(notURL, {
-                                method: "GET",
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'Accept': 'application/json',
-                                    'Authorization': 'Bearer '+jwtToken
-                                },
-                            });
+                        method: "GET",
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        credentials: "include"
+                    });
                     let notList = await loginResponse.text();
                     //alert(notList);
                     notList = notList.replace("'","");
