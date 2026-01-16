@@ -1,29 +1,17 @@
 import { useEffect, useState } from "react";
-export function GetSettingsTime({settingsUrl, settingsTime, setSettingsTime}){
+import { getFetch} from './restSendFetch.jsx';
+export async function GetSettingsTime({settingsUrl, settingsTime}){
     //console.log("url, ",settingsUrl,";time ",settingsTime,";token ",jwtToken); 
     var intTime;
-        useEffect(() => {
-            async function fetchSettingsTime() {
                 try{
     
-                const loginResponse = await fetch(settingsUrl, {
-                method: "GET",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                },
-                credentials: "include",
-                });
+                const loginResponse = await getFetch(settingsUrl);
                 intTime = await loginResponse.text();
-      //          console.log(intTime);
-                setSettingsTime(intTime.split(" ")[1].split(".")[0]);
+                intTime = (String(intTime).split(" ")[1].split(".")[0]);
                 }catch(error){
                     console.error("login error", error,intTime);
                 }
-            }
-            fetchSettingsTime();
-        }, []);
-        console.log(intTime);
+            
     return (intTime);
 
 }

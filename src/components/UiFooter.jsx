@@ -1,4 +1,4 @@
-export function UiFooter({operatorName, lastSettingsUpdate, status, newestNotificationStartDate}){
+export function UiFooter({operatorName, lastSettingsUpdate, status, startDate}){
     return(
         <footer id="FooterMain">
             <div id="FooterText">
@@ -40,12 +40,12 @@ export function UiFooter({operatorName, lastSettingsUpdate, status, newestNotifi
                         <tbody>
                             <tr>
                                 <td>
-                                    newest from
+                                    last change
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    {newestNotificationStartDate}
+                                    {startDate}
                                 </td>
                             </tr>
                         </tbody>

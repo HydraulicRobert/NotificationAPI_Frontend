@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-export function GetNotifications({notURL, tableClick, notsRefresh}){
+import { getFetch } from "./restSendFetch";
+export function GetNotifications({notURL, tableClick, notDateTime}){
 //alert(notURL);
 var [items, setItems] = useState([]);
 var itemIdLength;
@@ -7,15 +8,16 @@ var itemAffectedLength = 0;
     useEffect(() => {
         async function fetchNotifications() {
             try{
-
-                    const loginResponse = await fetch(notURL, {
+                setItems([]);
+                    const loginResponse = await getFetch(notURL); 
+                    /*await fetch(notURL, {
                         method: "GET",
                         headers: {
                             'Content-Type': 'application/json',
                             'Accept': 'application/json'
                         },
                         credentials: "include"
-                    });
+                    });*/
                     let notList = await loginResponse.text();
                     //alert(notList);
                     notList = notList.replace("'","");
@@ -30,34 +32,29 @@ var itemAffectedLength = 0;
             
         }
         fetchNotifications();
-    }, []);//platzhalter. sobald sich jwtToken ändert läuft er useeffect durch
-                        for(var i = 0; i < items.length;i++)
+    }, [notDateTime]);
+                        let maxBaselength = 0;
+                        for(let i = 0; i < items.length;i++)
                         { 
-                            const affected = items[i].affected;
-                            //console.log(i, affected);
-                            if(affected.length > itemAffectedLength)
+                            const baseLength = String(items[i].affected).trim().length;
+                            //const affected = items[i].affected;
+                            if(baseLength > maxBaselength)
                             {
-                            //    console.log(affected.length, " is bigger than ",itemAffectedLength);
-                                itemAffectedLength = affected.length+2;
+                                maxBaselength = baseLength;
                             }
+                            
                         }
-                        for(var i = 0; i < items.length;i++)
+                        const targetLength = maxBaselength+2;
+                        for(let i = 0; i < items.length;i++)
                         {
-                            const affected = items[i].affected;
+                            const affected = String(items[i].affected).trim();
                             const itemID = items[i].id;
-                            for(var j = 0; j<(itemAffectedLength-affected.length);j++)
-                            {
-                                if(((itemAffectedLength-affected.length)-j) >= 1)
-                                {
-                                    items[i].affected = items[i].affected+"\u00A0";
-                                }
-                            } 
+                            let newAffected = affected.padEnd(targetLength,"\u00A0");
                             if((itemID <10))
                             {
-                                items[i].affected = items[i].affected+"\u00A0";
+                                newAffected+= "\u00A0";
                             }
-//console.log("length of ",affected," is",(itemAffectedLength-affected.length)-j);
-
+                            items[i].affected = newAffected;
                         }
 
                         return(

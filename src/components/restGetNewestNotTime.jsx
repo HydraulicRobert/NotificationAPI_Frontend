@@ -1,27 +1,17 @@
 import { useEffect, useState } from "react";
-export function GetNewestNotTime({newestNotTimeUrl, newestNotTime, setNewestNotTime}){
-//    console.log("url, ",newestNotTimeUrl,";time ",newestNotTime,";token ",jwtToken); 
+import { getFetch} from "./restSendFetch.jsx";
+export async function GetNewestNotTime({newestNotTimeUrl, newestNotTime}){
     var intTime;
-        useEffect(() => {
-            async function fetchNotsTime() {
                 try{
     
-                const loginResponse = await fetch(newestNotTimeUrl, {
-                method: "GET",
-                'credentials': "include",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
-                });
+                const loginResponse = await getFetch(newestNotTimeUrl); 
                 intTime = await loginResponse.text();
-                setNewestNotTime(intTime.split(" ")[1].split(".")[0]);
+                intTime = (String(intTime).split(" ")[1].split(".")[0]);
                 }catch(error){
                     console.error("login error", error);
                 }
-            }
-            fetchNotsTime();
-        }, [newestNotTime]);
+                console.log(intTime);
+            
     return (intTime);
 
 }

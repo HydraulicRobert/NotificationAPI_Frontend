@@ -24,19 +24,33 @@ function App() {
 	const [accessStatus, setAccessStatus] = useState("");
 	const [userData, setUserData] = useState([]);
 	const [status, setStatus] = useState("N/A");
-	const [settingsTime, setSettingsTime] = useState("");
-	const [newestNotTime, setNewestNotTime] = useState("");
+	const [currentNotTime, setCurrentNotTime] = useState("");
+	const [currentSetTime, setCurrentSetTime] = useState("");
+	const [setTimeHasChanged, setSetTimeHasChanged] = useState(false);
+	const currentNotTimeRef = useRef(currentNotTime);
+	const currentSetTimeRef = useRef(currentSetTime);
+	const setTimeHasChangedRef = useRef(setTimeHasChanged);
+//	const [settingsTime, setSettingsTime] = useState("");
+//	const [newestNotTime, setNewestNotTime] = useState("");
 	const [notAllRefresh, setNotAllRefresh] = useState(0);
 	const [urls, setUrls] = useState({
 			login: null,
 			refresh: null,
 			notAll: null,
 			set: null,
-			notTop1: null,
+			notTop1: null
 		});	
-		
-	useEffect(() => {
-	},[loginStatus]);
+	useEffect(()=>{
+		currentNotTimeRef.current = currentNotTime;
+	},[currentNotTime]);
+	
+	useEffect(()=>{
+		currentSetTimeRef.current = currentSetTime;
+	},[currentSetTime]);
+	
+	useEffect(()=>{
+		setTimeHasChangedRef.current = setTimeHasChanged;
+	},[setTimeHasChanged]);
 	const handleNotifications = async() => {
 		setStatus("loading");
 		const notificationList = await getNotifications(loginStatus,  urls.notAll)
@@ -89,7 +103,40 @@ function App() {
 
 		init();
 	}, []);
+	useEffect(() => {
+		const updateAllDates = async() =>{
+			setStatus("loading");
+			if(loginStatus.receivedRefreshToken == "200"){
+				const tmpCurrentSetTime = await GetSettingsTime({
+							settingsUrl: urls.set,
+							settingsTime:  currentSetTimeRef.current
+				});
+				if(tmpCurrentSetTime && tmpCurrentSetTime != currentSetTimeRef.current)
+				{
+					setCurrentSetTime(tmpCurrentSetTime);
+					console.log("changed from ",currentSetTimeRef.current," to ",tmpCurrentSetTime);
+					setSetTimeHasChanged(true);
+				};
+				if(setTimeHasChangedRef.current){
+					setSetTimeHasChanged(false);
+					const tmpCurrentNotTime = await GetSettingsTime({
+							settingsUrl: urls.notTop1,
+							settingsTime:  currentNotTimeRef.current
+					});
+					if(tmpCurrentNotTime && tmpCurrentNotTime != currentNotTimeRef.current)
+					{
+						setCurrentNotTime(tmpCurrentNotTime);
+						console.log("nottime changed and reset");
+					}
+				};
 
+			};
+			setStatus("idle");
+		}
+		const checkDates = setInterval(updateAllDates,6000);
+		updateAllDates();
+	return () => clearInterval(checkDates);
+	},[loginStatus.receivedRefreshToken,urls.set,urls.notTop1, currentSetTime]);
 	if (!urls) {
     	return <p>loading</p>;
   	}
@@ -107,34 +154,24 @@ function App() {
 			{(loginStatus != null && loginStatus.receivedRefreshToken == "200")?(
 			<>
 				<GetNotifications 
-						notURL={urls.notAll} 
-						tableClick={notClick} notsRefresh={notAllRefresh}
-					/>
-				<GetSettingsTime 
-					settingsUrl={urls.set} 
-					settingsTime = {settingsTime}
-					setSettingsTime={setSettingsTime}
+					notURL={urls.notAll} 
+					tableClick={notClick} 
+					notDateTime={currentNotTime}
 				/>
-				<GetNewestNotTime 	
-						newestNotTime={newestNotTime} 
-						newestNotTimeUrl={urls.notTop1}
-						setNewestNotTime={setNewestNotTime}
-					/>
 			</>
 			):null}
 				<UiFooter 
 					operatorName={((userData != null && 
 						loginStatus != null && 
 						loginStatus.receivedRefreshToken == "200")?userData.username:"N/A")}
-					lastSettingsUpdate={((settingsTime != null && 
+					lastSettingsUpdate={((currentSetTime != null && 
 						loginStatus != null && 
-						loginStatus.receivedRefreshToken == "200")?settingsTime:"N/A")} 
+						loginStatus.receivedRefreshToken == "200")?currentSetTime:"N/A")} 
 					status={status} 
-					newestNotificationStartDate={((newestNotTime != null && 
+					startDate={((currentSetTime != null && 
 						loginStatus != null &&
-						loginStatus.receivedRefreshToken == "200")?newestNotTime:"N/A")}
+						loginStatus.receivedRefreshToken == "200")?currentSetTime:"N/A")}
 				/>
-
 		</div>
 	)
 }
